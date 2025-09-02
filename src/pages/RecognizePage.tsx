@@ -9,8 +9,8 @@ interface FoodResult {
   food: string;
   calories: number;
   protein: number;
-  carbs: number;
-  fat: number;
+  gi: number;
+  gi_explanation: string;
   suggestions: string[];
 }
 
@@ -39,40 +39,50 @@ const RecognizePage = () => {
 
     setIsAnalyzing(true);
     
-    // 模拟AI识别过程
-    setTimeout(() => {
-      const mockResult: FoodResult = {
-        food: "烤三文鱼配蔬菜",
-        calories: 520,
-        protein: 38,
-        carbs: 26,
-        fat: 26,
-        suggestions: [
-          "这是一份营养均衡的餐食",
-          "富含优质蛋白质和健康脂肪",
-          "建议搭配全谷物主食更好"
-        ]
-      };
-      
-      setResult(mockResult);
-      setIsAnalyzing(false);
-      
-      // 保存到历史记录
-      const history = JSON.parse(localStorage.getItem('calorieHistory') || '[]');
-      const newRecord = {
-        id: Date.now(),
-        image: selectedImage,
-        result: mockResult,
-        timestamp: new Date().toISOString()
-      };
-      history.unshift(newRecord);
-      localStorage.setItem('calorieHistory', JSON.stringify(history));
-      
-      toast({
-        title: "识别完成",
-        description: "已添加到历史记录",
+    try {
+      const response = await fetch('http://localhost:3001/api/recognize-food', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: selectedImage
+        })
       });
-    }, 2000);
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setResult(data.data);
+        
+        // 保存到历史记录
+        const history = JSON.parse(localStorage.getItem('calorieHistory') || '[]');
+        const newRecord = {
+          id: Date.now(),
+          image: selectedImage,
+          result: data.data,
+          timestamp: new Date().toISOString()
+        };
+        history.unshift(newRecord);
+        localStorage.setItem('calorieHistory', JSON.stringify(history));
+        
+        toast({
+          title: "识别完成",
+          description: "已添加到历史记录",
+        });
+      } else {
+        throw new Error(data.error || '识别失败');
+      }
+    } catch (error) {
+      console.error('识别错误:', error);
+      toast({
+        title: "识别失败",
+        description: "请检查网络连接或重试",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const resetAnalysis = () => {
@@ -171,19 +181,20 @@ const RecognizePage = () => {
                       <div className="text-2xl font-bold text-primary">{result.calories}</div>
                       <div className="text-sm text-muted-foreground">卡路里</div>
                     </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-card-foreground">蛋白质</span>
-                        <span className="text-sm font-medium text-card-foreground">{result.protein}g</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-card-foreground">碳水</span>
-                        <span className="text-sm font-medium text-card-foreground">{result.carbs}g</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-card-foreground">脂肪</span>
-                        <span className="text-sm font-medium text-card-foreground">{result.fat}g</span>
-                      </div>
+                    <div className="text-center p-4 bg-primary/5 rounded-lg">
+                      <div className="text-2xl font-bold text-primary">{result.gi}</div>
+                      <div className="text-sm text-muted-foreground">GI值</div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-card-foreground">蛋白质</span>
+                      <span className="text-sm font-medium text-card-foreground">{result.protein}g</span>
+                    </div>
+                    <div className="p-3 bg-muted/20 rounded-lg">
+                      <div className="text-sm font-medium text-card-foreground mb-1">GI值说明</div>
+                      <div className="text-xs text-muted-foreground">{result.gi_explanation}</div>
                     </div>
                   </div>
                   

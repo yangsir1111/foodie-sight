@@ -12,8 +12,9 @@ interface HistoryRecord {
     food: string;
     calories: number;
     protein: number;
-    carbs: number;
-    fat: number;
+    gi: number;
+    gi_explanation: string;
+    suggestions: string[];
   };
   timestamp: string;
 }
@@ -144,8 +145,7 @@ const ProfilePage = () => {
                     </div>
                     
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>碳水 {record.result.carbs}g</span>
-                      <span>脂肪 {record.result.fat}g</span>
+                      <span>GI值 {record.result.gi}</span>
                     </div>
                     
                     <div className="text-xs text-muted-foreground">
