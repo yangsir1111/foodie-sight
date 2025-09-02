@@ -68,6 +68,18 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			backgroundImage: {
+				'app-gradient-primary': 'var(--app-gradient-primary)',
+				'app-gradient-secondary': 'var(--app-gradient-secondary)',
+				'app-gradient-card': 'var(--app-gradient-card)'
+			},
+			boxShadow: {
+				'app-card': 'var(--app-shadow-card)',
+				'app-float': 'var(--app-shadow-float)'
+			},
+			transitionProperty: {
+				'app': 'var(--app-transition)'
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
