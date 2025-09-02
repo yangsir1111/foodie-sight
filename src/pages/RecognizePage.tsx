@@ -107,7 +107,7 @@ const RecognizePage = () => {
                 <Button
                   onClick={() => fileInputRef.current?.click()}
                   variant="outline"
-                  className="w-full"
+                  className="w-full text-white border-white hover:bg-white hover:text-black"
                   size="lg"
                 >
                   <Upload className="mr-2" size={20} />
