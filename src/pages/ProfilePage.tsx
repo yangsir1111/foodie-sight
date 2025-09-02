@@ -3,6 +3,7 @@ import { Trash2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import foodBackground from "@/assets/food-background.jpg";
 
 interface HistoryRecord {
   id: number;
@@ -67,7 +68,15 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="pb-20 p-4 min-h-screen bg-background">
+    <div 
+      className="pb-20 p-4 min-h-screen bg-background relative"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${foodBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="max-w-md mx-auto space-y-6">
         <div className="text-center py-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">我的记录</h1>
