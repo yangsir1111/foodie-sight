@@ -3,6 +3,7 @@ import { Camera, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import foodBackground from "@/assets/food-background.jpg";
 
 interface FoodResult {
   food: string;
@@ -80,7 +81,15 @@ const RecognizePage = () => {
   };
 
   return (
-    <div className="pb-20 p-4 min-h-screen bg-background">
+    <div 
+      className="pb-20 p-4 min-h-screen bg-background relative"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${foodBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="max-w-md mx-auto space-y-6">
         <div className="text-center py-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">AI热量识别</h1>
@@ -193,7 +202,7 @@ const RecognizePage = () => {
                   <Button
                     onClick={resetAnalysis}
                     variant="outline"
-                    className="w-full"
+                    className="w-full text-white border-white hover:bg-white hover:text-black"
                   >
                     继续识别
                   </Button>
